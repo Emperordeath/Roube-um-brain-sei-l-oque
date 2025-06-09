@@ -1,0 +1,262 @@
+local _x7z9q = game.Players.LocalPlayer
+
+-- ScreenGui
+local _p8r2t = Instance.new("ScreenGui")
+_p8r2t.Name = "DeathTeamGUI"
+_p8r2t.ResetOnSpawn = false
+_p8r2t.Parent = _x7z9q:WaitForChild("PlayerGui")
+
+-- GUI Frame
+local _k3m1v = Instance.new("Frame")
+_k3m1v.Size = UDim2.new(0, 180, 0, 170)
+_k3m1v.AnchorPoint = Vector2.new(0.5, 0.5)
+_k3m1v.Position = UDim2.new(0.5, 0, 0.5, 0)
+_k3m1v.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+_k3m1v.Visible = false
+_k3m1v.Active = true
+_k3m1v.Draggable = true
+_k3m1v.Parent = _p8r2t
+
+-- Design
+Instance.new("UICorner", _k3m1v).CornerRadius = UDim.new(0, 12)
+local _n4b6y = Instance.new("UIStroke")
+_n4b6y.Color = Color3.fromRGB(80, 0, 0)
+_n4b6y.Thickness = 1.7
+_n4b6y.Parent = _k3m1v
+
+-- Button Layout
+local _j9f5w = Instance.new("UIListLayout", _k3m1v)
+_j9f5w.Padding = UDim.new(0, 8)
+_j9f5w.VerticalAlignment = Enum.VerticalAlignment.Top
+_j9f5w.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+local _q2h8x = Instance.new("UIPadding", _k3m1v)
+_q2h8x.PaddingTop = UDim.new(0, 12)
+
+-- Toggle Function
+local function _z5t3r(_data)
+    local _v6y8m = _data.Default or false
+
+    local _b1n7k = Instance.new("TextButton")
+    _b1n7k.Size = UDim2.new(0.9, 0, 0, 32)
+    _b1n7k.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    _b1n7k.Font = Enum.Font.GothamBold
+    _b1n7k.TextSize = 18
+    _b1n7k.TextColor3 = Color3.fromRGB(200, 0, 0)
+    _b1n7k.Text = _data.Name
+    _b1n7k.TextXAlignment = Enum.TextXAlignment.Left
+    _b1n7k.BorderSizePixel = 0
+    _b1n7k.Parent = _k3m1v
+    Instance.new("UICorner", _b1n7k).CornerRadius = UDim.new(0, 8)
+
+    local _i4c9p = Instance.new("Frame")
+    _i4c9p.Size = UDim2.new(0, 18, 0, 18)
+    _i4c9p.Position = UDim2.new(1, -26, 0.5, -9)
+    _i4c9p.BackgroundColor3 = _v6y8m and Color3.fromRGB(200, 0, 0) or Color3.fromRGB(80, 0, 0)
+    _i4c9p.BorderSizePixel = 0
+    _i4c9p.Parent = _b1n7k
+    Instance.new("UICorner", _i4c9p).CornerRadius = UDim.new(1, 0)
+
+    _b1n7k.MouseButton1Click:Connect(function()
+        _v6y8m = not _v6y8m
+        _i4c9p.BackgroundColor3 = _v6y8m and Color3.fromRGB(200, 0, 0) or Color3.fromRGB(80, 0, 0)
+        if _data.Callback then
+            _data.Callback(_v6y8m)
+        end
+    end)
+end
+
+-- Instant Toggle
+local _w8g2l = false
+
+local function _m3j9k(_active)
+    for _, _prompt in ipairs(game:GetDescendants()) do
+        if _prompt:IsA("ProximityPrompt") then
+            _prompt.HoldDuration = _active and 0 or 1
+        end
+    end
+end
+
+game.DescendantAdded:Connect(function(_desc)
+    if _desc:IsA("ProximityPrompt") and _w8g2l then
+        _desc.HoldDuration = 0
+    end
+end)
+
+-- Auto Steal GUI
+local function _r6t4p()
+    local _sg = Instance.new("ScreenGui")
+    local _fr = Instance.new("Frame")
+    local _btn = Instance.new("TextButton")
+    local _lbl = Instance.new("TextLabel")
+    local _uc1 = Instance.new("UICorner")
+    local _uc2 = Instance.new("UICorner")
+    local _uc3 = Instance.new("UICorner")
+
+    local _ready = true
+
+    _sg.Name = "DeathTeamStealGUI"
+    _sg.Parent = game.CoreGui
+    _sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+    _fr.Parent = _sg
+    _fr.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    _fr.Position = UDim2.new(0, 20, 0, 100)
+    _fr.Size = UDim2.new(0, 140, 0, 90)
+    _fr.Active = true
+    _fr.Draggable = true
+    _uc1.CornerRadius = UDim.new(0, 10)
+    _uc1.Parent = _fr
+
+    _btn.Parent = _fr
+    _btn.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+    _btn.Position = UDim2.new(0, 10, 0, 45)
+    _btn.Size = UDim2.new(0, 120, 0, 30)
+    _btn.Font = Enum.Font.GothamBold
+    _btn.Text = "ACTIVATE"
+    _btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    _btn.TextSize = 12
+    _btn.TextWrapped = true
+    _uc2.CornerRadius = UDim.new(0, 8)
+    _uc2.Parent = _btn
+
+    _lbl.Parent = _fr
+    _lbl.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    _lbl.Position = UDim2.new(0, 10, 0, 10)
+    _lbl.Size = UDim2.new(0, 120, 0, 25)
+    _lbl.Font = Enum.Font.GothamBold
+    _lbl.Text = "DEATHTEAM STEAL"
+    _lbl.TextColor3 = Color3.fromRGB(200, 0, 0)
+    _lbl.TextSize = 14
+    _lbl.Visible = true
+    _uc3.CornerRadius = UDim.new(0, 6)
+    _uc3.Parent = _lbl
+
+    local function _y7u2()
+        local _pl = game.Players.LocalPlayer
+        local _ch = _pl.Character or _pl.CharacterAdded:Wait()
+        local _tch = _ch:FindFirstChild("HumanoidRootPart")
+        if not _tch then
+            _lbl.Text = "ERROR"
+            return
+        end
+
+        for i = 1, 19 do
+            local _tm = math.floor((1.9 - (i - 1) * 0.1) * 10) / 10
+            _lbl.Text = "WORKING " .. tostring(_tm) .. "s"
+            wait(0.1)
+        end
+
+        local _tchd = 0
+        for i = 1, 2 do
+            for _, _obj in ipairs(workspace:GetDescendants()) do
+                if _obj:IsA("BasePart") and _obj.Name == "DeliveryHitbox" then
+                    firetouchinterest(_tch, _obj, 0)
+                    wait(0.13)
+                    firetouchinterest(_tch, _obj, 1)
+                    _tchd = _tchd + 1
+                end
+            end
+        end
+
+        _lbl.Text = "READY"
+    end
+
+    _btn.MouseButton1Click:Connect(function()
+        if _ready then
+            _lbl.Text = "ACTIVE"
+        else
+            _lbl.Text = "READY"
+        end
+        _ready = not _ready
+        _y7u2()
+    end)
+end
+
+-- Toggles
+_z5t3r({
+    Name = "AUTO STEAL",
+    Default = false,
+    Callback = function(_v)
+        if _v then
+            _r6t4p()
+        end
+    end
+})
+
+_z5t3r({
+    Name = "INSTANT TAKE",
+    Default = false,
+    Callback = function(_v)
+        _w8g2l = _v
+        _m3j9k(_v)
+    end
+})
+
+-- Infinite Jump
+local _infj = false
+local _uis = game:GetService("UserInputService")
+local _hum = nil
+
+_uis.JumpRequest:Connect(function()
+    if _infj and _hum then
+        _hum:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
+
+_x7z9q.CharacterAdded:Connect(function(_char)
+    if _infj then
+        _hum = _char:WaitForChild("Humanoid")
+    end
+end)
+
+_z5t3r({
+    Name = "INFINITE JUMP",
+    Default = false,
+    Callback = function(_v)
+        _infj = _v
+        if _v then
+            local _chr = _x7z9q.Character or _x7z9q.CharacterAdded:Wait()
+            _hum = _chr:WaitForChild("Humanoid")
+        else
+            _hum = nil
+        end
+    end
+})
+
+-- Toggle Button
+local _tbw = Instance.new("TextButton")
+_tbw.Name = "DeathTeamButton"
+_tbw.Size = UDim2.new(0, 100, 0, 40)
+_tbw.Position = UDim2.new(0, 20, 0.2, 0)
+_tbw.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+_tbw.Text = "DeathTeam"
+_tbw.Font = Enum.Font.GothamBlack
+_tbw.TextSize = 14
+_tbw.TextColor3 = Color3.fromRGB(200, 0, 0)
+_tbw.Parent = _p8r2t
+_tbw.Active = true
+_tbw.Draggable = true
+
+local _bc = Instance.new("UICorner")
+_bc.CornerRadius = UDim.new(0, 8)
+_bc.Parent = _tbw
+
+local _bs = Instance.new("UIStroke")
+_bs.Color = Color3.fromRGB(80, 0, 0)
+_bs.Thickness = 1.5
+_bs.Parent = _tbw
+
+local _op = false
+_tbw.MouseButton1Click:Connect(function()
+    _op = not _op
+    _k3m1v.Visible = _op
+end)
+
+-- Notification
+game.StarterGui:SetCore("SendNotification", {
+    Title = "DEATHTEAM ACTIVATED",
+    Text = "By: DeathTeam01",
+    Icon = "rbxthumb://type=AvatarHeadShot&id=4199255338&w=150&h=150",
+    Duration = 5,
+})
